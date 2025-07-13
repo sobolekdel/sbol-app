@@ -1,100 +1,87 @@
-// app/page.tsx
-
 import React from 'react';
-import { Search, SlidersHorizontal, Clock } from 'lucide-react';
-import BottomNav from '@/components/BottomNav';
-import '@/styles/globals.css';
+import { Search, Heart, PlusCircle, Bell, User } from 'lucide-react';
+import clsx from 'clsx';
 
 const categories = ['Все', 'Смартфоны', 'Одежда', 'Консоли', 'Гаджеты', 'Ноутбуки'];
 
-const products = [
+const mockItems = [
   {
     id: 1,
-    title: 'iPhone 13 Pro 128GB',
-    price: '56 000 ₽',
-    image:
-      'https://27.img.avito.st/image/1/1.ayg03LaopDeTKfHNSKiZgFvmqj2v7MPSUPA2DRbpoT6R.gIhLJP84AoTUlzN0HPvcu-vzNVwN8hP7Jg3UeN7SGbQ',
+    title: 'iPhone 13 Pro Max 128GB',
+    price: 199,
+    image: 'https://avatars.mds.yandex.net/get-images-cbir/2419276/ZmOLReu3xydTu5zF3Wa0eg3830/ocr',
+    collected: 12500,
+    target: 15000,
+    participants: 21,
+    timeLeft: '2д 3ч'
   },
   {
     id: 2,
-    title: 'PlayStation 5 Digital Edition',
-    price: '41 500 ₽',
-    image:
-      'https://54.img.avito.st/image/1/1.UOnWprapkkqYfK8NqFGEf1aXkEUTfApUrX3RMG6rkkaY.P1-f69dbzpYHiV6nNS34WXzrxMPmvQQKD5z3MWHWqaU',
+    title: 'PlayStation 5 с двумя джойстиками',
+    price: 299,
+    image: 'https://avatars.mds.yandex.net/get-images-cbir/4497080/T74ZVLBeujFRWNRiXo6n8A1473/ocr',
+    collected: 34000,
+    target: 39000,
+    participants: 44,
+    timeLeft: '1д 12ч'
   },
-  {
-    id: 3,
-    title: 'Xiaomi Vacuum Cleaner G10',
-    price: '11 999 ₽',
-    image:
-      'https://35.img.avito.st/image/1/1.puMNn7aoyteqHOUnvFtFGsUnzdlpHISswjLnb6Erytea.2-z7a5C3ORW-YI2pBMDpo8TRNka3Y3MxN8MKYpRMcqI',
-  },
-  {
-    id: 4,
-    title: 'MacBook Air M1 2020',
-    price: '72 000 ₽',
-    image:
-      'https://33.img.avito.st/image/1/1.Q5IwlbaouXqGS5guheGe9x1mvHlyq4MI_wN4jI8quXqG.8EKHz9SglEmV_KqEwDuzHkMO8Rt7cZZBWwJZ1GJ3Q1I',
-  },
+  // добавь больше карточек по образцу
 ];
 
-export default function HomePage() {
-  return (
-    <div className="min-h-screen pb-20 bg-black text-white px-2">
-      <div className="sticky top-0 z-10 bg-black py-2">
-        <div className="flex items-center gap-2 px-2 py-1 border border-zinc-700 rounded-xl">
-          <Search size={16} className="text-zinc-400" />
-          <input
-            type="text"
-            placeholder="Поиск товаров.."
-            className="bg-transparent outline-none text-sm flex-1 placeholder-zinc-500"
-          />
-        </div>
+const BottomNav = () => (
+  <div className="fixed bottom-0 left-0 right-0 bg-black flex justify-around py-2 border-t border-neutral-800 z-50">
+    <NavIcon icon={<Search size={20} />} label="Поиск" active />
+    <NavIcon icon={<Heart size={20} />} label="Избранное" />
+    <NavIcon icon={<PlusCircle size={20} />} label="Добавить" />
+    <NavIcon icon={<Bell size={20} />} label="Уведомления" />
+    <NavIcon icon={<User size={20} />} label="Профиль" />
+  </div>
+);
 
-        <div className="flex gap-2 mt-3 overflow-x-auto scrollbar-hide">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              className="bg-zinc-800 text-white text-sm rounded-full px-3 py-1 whitespace-nowrap hover:bg-zinc-700"
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+const NavIcon = ({ icon, label, active }) => (
+  <div className="flex flex-col items-center text-xs">
+    <div className={clsx("mb-1", active ? 'text-white' : 'text-gray-500')}>{icon}</div>
+    <span className={clsx("text-[10px]", active ? 'text-white' : 'text-gray-500')}>{label}</span>
+  </div>
+);
+
+const RecommendationsPage = () => {
+  return (
+    <div className="min-h-screen pb-20 bg-neutral-950 text-white px-2">
+      <input
+        type="text"
+        placeholder="Поиск товаров.."
+        className="w-full p-2 mt-2 mb-3 rounded bg-neutral-800 text-white placeholder-gray-400"
+      />
+
+      <div className="flex overflow-x-auto space-x-2 pb-2">
+        {categories.map((cat, i) => (
+          <button
+            key={i}
+            className={clsx(
+              'px-3 py-1 rounded-full text-sm whitespace-nowrap',
+              i === 0 ? 'bg-white text-black' : 'bg-neutral-700 text-gray-300'
+            )}
+          >
+            {cat}
+          </button>
+        ))}
       </div>
 
-      <h2 className="text-sm mt-4 mb-2 font-semibold px-1">Рекомендации</h2>
-      <div className="grid grid-cols-2 gap-2">
-        {products.map((product) => (
-          <div
-            key={product.id}
-            className="bg-zinc-900 rounded-xl overflow-hidden relative"
-          >
+      <h2 className="mt-4 mb-2 text-sm font-semibold text-white">Рекомендации</h2>
+      <div className="grid grid-cols-2 gap-3">
+        {mockItems.map((item) => (
+          <div key={item.id} className="bg-neutral-900 rounded-2xl p-2 relative">
             <img
-              src={product.image}
-              alt={product.title}
-              className="w-full h-36 object-cover"
+              src={item.image}
+              alt={item.title}
+              className="w-full h-32 object-cover rounded-xl mb-2"
             />
-            <div className="p-2">
-              <p className="text-xs line-clamp-2 mb-1">{product.title}</p>
-              <p className="text-sm font-semibold text-green-400">{product.price}</p>
-            </div>
-            <div className="absolute top-2 right-2 text-white/80">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-heart"
-              >
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-              </svg>
-            </div>
+            <h3 className="text-sm font-semibold leading-tight mb-1">{item.title}</h3>
+            <p className="text-xs text-gray-400 mb-1">Цена билета: <span className="text-white font-medium">{item.price}₽</span></p>
+            <p className="text-xs text-gray-400 mb-1">Собрано: {item.collected.toLocaleString()} / {item.target.toLocaleString()}₽</p>
+            <p className="text-xs text-gray-500">👥 {item.participants} • ⏱ {item.timeLeft}</p>
+            <Heart size={14} className="absolute top-2 right-2 text-white" />
           </div>
         ))}
       </div>
@@ -102,4 +89,6 @@ export default function HomePage() {
       <BottomNav />
     </div>
   );
-}
+};
+
+export default RecommendationsPage;
