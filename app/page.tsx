@@ -38,6 +38,9 @@ const RecommendationsPage = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [items, setItems] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('Все');
+  const [city, setCity] = useState('Тула');
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(100000);
 
   const toggleFavorite = (id: number) => {
     setFavorites((prev) => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
@@ -61,7 +64,10 @@ const RecommendationsPage = () => {
 
   const filteredItems = items.filter(item =>
     (selectedCategory === 'Все' || item.category === selectedCategory) &&
-    (item.title.toLowerCase().includes(search.toLowerCase()))
+    item.title.toLowerCase().includes(search.toLowerCase()) &&
+    item.city === city &&
+    item.price >= minPrice &&
+    item.price <= maxPrice
   );
 
   return (
@@ -70,7 +76,7 @@ const RecommendationsPage = () => {
         <Search className="absolute left-3 text-gray-400" size={18} />
         <input
           type="text"
-          placeholder="Поиск товаров... Ваш город: Тула"
+          placeholder={`Поиск товаров... Ваш город: ${city}`}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-10 pr-3 py-2 rounded-full bg-neutral-800 text-white placeholder-gray-400"
@@ -105,7 +111,7 @@ const RecommendationsPage = () => {
         ))}
       </div>
 
-      <h2 className="mt-4 mb-3 text-xl font-bold text-white">Рекомендации</h2>
+      <h2 className="mt-4 mb-3 text-lg font-bold text-white">Рекомендации</h2>
 
       <div className="grid grid-cols-2 gap-4">
         {filteredItems.map((item) => (
