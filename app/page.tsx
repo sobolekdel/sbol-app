@@ -1,8 +1,10 @@
-import React from 'react';
-import { Search, Heart, PlusCircle, Bell, User } from 'lucide-react';
-import clsx from 'clsx';
+'use client'
 
-const categories = ['Все', 'Смартфоны', 'Одежда', 'Консоли', 'Гаджеты', 'Ноутбуки'];
+import React from 'react'
+import { Search, Heart, PlusCircle, Bell, User } from 'lucide-react'
+import clsx from 'clsx'
+
+const categories = ['Все', 'Смартфоны', 'Одежда', 'Консоли', 'Гаджеты', 'Ноутбуки']
 
 const mockItems = [
   {
@@ -25,8 +27,34 @@ const mockItems = [
     participants: 44,
     timeLeft: '1д 12ч'
   },
-  // добавь больше карточек по образцу
-];
+  {
+    id: 3,
+    title: 'MacBook Pro 14"',
+    price: 349,
+    image: 'https://avatars.mds.yandex.net/get-images-cbir/2851510/LQ17e2R7lX7uhs5a6H_Txg1460/ocr',
+    collected: 49000,
+    target: 58000,
+    participants: 59,
+    timeLeft: '5ч 42м'
+  },
+  {
+    id: 4,
+    title: 'Sony WH-1000XM5',
+    price: 59,
+    image: 'https://avatars.mds.yandex.net/get-images-cbir/2500842/hTbZz_mzk7NNb67XzGHGsw9496/ocr',
+    collected: 7500,
+    target: 10000,
+    participants: 17,
+    timeLeft: '7ч 10м'
+  },
+]
+
+const NavIcon = ({ icon, label, active }: { icon: React.ReactNode; label: string; active?: boolean }) => (
+  <div className="flex flex-col items-center text-xs">
+    <div className={clsx('mb-1', active ? 'text-white' : 'text-gray-500')}>{icon}</div>
+    <span className={clsx('text-[10px]', active ? 'text-white' : 'text-gray-500')}>{label}</span>
+  </div>
+)
 
 const BottomNav = () => (
   <div className="fixed bottom-0 left-0 right-0 bg-black flex justify-around py-2 border-t border-neutral-800 z-50">
@@ -36,24 +64,19 @@ const BottomNav = () => (
     <NavIcon icon={<Bell size={20} />} label="Уведомления" />
     <NavIcon icon={<User size={20} />} label="Профиль" />
   </div>
-);
-
-const NavIcon = ({ icon, label, active }) => (
-  <div className="flex flex-col items-center text-xs">
-    <div className={clsx("mb-1", active ? 'text-white' : 'text-gray-500')}>{icon}</div>
-    <span className={clsx("text-[10px]", active ? 'text-white' : 'text-gray-500')}>{label}</span>
-  </div>
-);
+)
 
 const RecommendationsPage = () => {
   return (
     <div className="min-h-screen pb-20 bg-neutral-950 text-white px-2">
+      {/* Поиск */}
       <input
         type="text"
         placeholder="Поиск товаров.."
         className="w-full p-2 mt-2 mb-3 rounded bg-neutral-800 text-white placeholder-gray-400"
       />
 
+      {/* Категории */}
       <div className="flex overflow-x-auto space-x-2 pb-2">
         {categories.map((cat, i) => (
           <button
@@ -68,7 +91,10 @@ const RecommendationsPage = () => {
         ))}
       </div>
 
+      {/* Заголовок */}
       <h2 className="mt-4 mb-2 text-sm font-semibold text-white">Рекомендации</h2>
+
+      {/* Карточки */}
       <div className="grid grid-cols-2 gap-3">
         {mockItems.map((item) => (
           <div key={item.id} className="bg-neutral-900 rounded-2xl p-2 relative">
@@ -78,17 +104,22 @@ const RecommendationsPage = () => {
               className="w-full h-32 object-cover rounded-xl mb-2"
             />
             <h3 className="text-sm font-semibold leading-tight mb-1">{item.title}</h3>
-            <p className="text-xs text-gray-400 mb-1">Цена билета: <span className="text-white font-medium">{item.price}₽</span></p>
-            <p className="text-xs text-gray-400 mb-1">Собрано: {item.collected.toLocaleString()} / {item.target.toLocaleString()}₽</p>
+            <p className="text-xs text-gray-400 mb-1">
+              Цена билета: <span className="text-white font-medium">{item.price}₽</span>
+            </p>
+            <p className="text-xs text-gray-400 mb-1">
+              Собрано: {item.collected.toLocaleString()} / {item.target.toLocaleString()}₽
+            </p>
             <p className="text-xs text-gray-500">👥 {item.participants} • ⏱ {item.timeLeft}</p>
             <Heart size={14} className="absolute top-2 right-2 text-white" />
           </div>
         ))}
       </div>
 
+      {/* Нижняя навигация */}
       <BottomNav />
     </div>
-  );
-};
+  )
+}
 
-export default RecommendationsPage;
+export default RecommendationsPage
