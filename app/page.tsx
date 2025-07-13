@@ -1,49 +1,43 @@
-// app/page.tsx
+"use client";
 
-export default function Home() {
-  const items = [
-    {
-      id: 1,
-      title: 'iPhone 14 Pro',
-      price: '450 ₽ за билет',
-      image: 'https://via.placeholder.com/300x200?text=iPhone+14+Pro',
-    },
-    {
-      id: 2,
-      title: 'Кроссовки Nike',
-      price: '120 ₽ за билет',
-      image: 'https://via.placeholder.com/300x200?text=Nike+Shoes',
-    },
-    {
-      id: 3,
-      title: 'PS5 Digital Edition',
-      price: '320 ₽ за билет',
-      image: 'https://via.placeholder.com/300x200?text=PS5',
-    },
-    {
-      id: 4,
-      title: 'Смарт-часы Huawei',
-      price: '99 ₽ за билет',
-      image: 'https://via.placeholder.com/300x200?text=Huawei+Watch',
-    },
-  ]
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import BottomNav from "@/components/BottomNav";
+
+export default function HomePage() {
+  const [username, setUsername] = useState("Гость");
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("sbol_username");
+    if (savedUser) setUsername(savedUser);
+  }, []);
 
   return (
-    <main className="min-h-screen bg-black text-white p-4">
-      <h1 className="text-2xl font-bold mb-4">🎯 Рекомендации</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {items.map(item => (
-          <div key={item.id} className="bg-zinc-900 rounded-xl p-3">
-            <img
-              src={item.image}
-              alt={item.title}
-              className="w-full h-40 object-cover rounded-md mb-3"
-            />
-            <div className="text-lg font-semibold">{item.title}</div>
-            <div className="text-sm text-green-400">{item.price}</div>
-          </div>
-        ))}
-      </div>
-    </main>
-  )
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <main className="flex-1 p-4 space-y-6">
+        <h1 className="text-2xl font-bold">Добро пожаловать, {username}!</h1>
+        <p className="text-sm text-gray-400">
+          Это главная страница SBOL. Здесь вы сможете участвовать в розыгрышах, просматривать объявления и управлять своим профилем.
+        </p>
+
+        <div className="grid grid-cols-2 gap-4">
+          <Link href="/search">
+            <Button className="w-full">Поиск</Button>
+          </Link>
+          <Link href="/favorites">
+            <Button className="w-full">Избранное</Button>
+          </Link>
+          <Link href="/ads">
+            <Button className="w-full">Объявления</Button>
+          </Link>
+          <Link href="/profile">
+            <Button className="w-full">Профиль</Button>
+          </Link>
+        </div>
+      </main>
+
+      <BottomNav />
+    </div>
+  );
 }
