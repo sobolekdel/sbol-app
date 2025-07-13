@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -39,8 +40,7 @@ const RecommendationsPage = () => {
   const [items, setItems] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('Все');
   const [city, setCity] = useState('Тула');
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(100000);
+  const [sortBy, setSortBy] = useState<'priceAsc' | 'priceDesc' | 'newest'>('newest');
 
   const toggleFavorite = (id: number) => {
     setFavorites((prev) => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
@@ -62,17 +62,21 @@ const RecommendationsPage = () => {
     }
   }, [search]);
 
-  const filteredItems = items.filter(item =>
-    (selectedCategory === 'Все' || item.category === selectedCategory) &&
-    item.title.toLowerCase().includes(search.toLowerCase()) &&
-    item.city === city &&
-    item.price >= minPrice &&
-    item.price <= maxPrice
-  );
+  const filteredItems = items
+    .filter(item =>
+      (selectedCategory === 'Все' || item.category === selectedCategory) &&
+      item.title.toLowerCase().includes(search.toLowerCase()) &&
+      item.city.toLowerCase().includes(city.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (sortBy === 'priceAsc') return a.price - b.price;
+      if (sortBy === 'priceDesc') return b.price - a.price;
+      return 0;
+    });
 
   return (
     <div className="min-h-screen pb-24 bg-neutral-950 text-white px-4">
-      <div className="relative mt-2 mb-3 flex items-center">
+      <div className="relative mt-6 mb-4 flex items-center">
         <Search className="absolute left-3 text-gray-400" size={18} />
         <input
           type="text"
@@ -111,7 +115,23 @@ const RecommendationsPage = () => {
         ))}
       </div>
 
-      <h2 className="mt-4 mb-3 text-lg font-bold text-white">Рекомендации</h2>
+      <div className="flex justify-between items-center mt-4 mb-2 text-sm text-gray-400">
+        <div>
+          <label htmlFor="sort" className="mr-2">Сортировка:</label>
+          <select
+            id="sort"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as any)}
+            className="bg-neutral-800 rounded px-2 py-1 text-white"
+          >
+            <option value="newest">Сначала новые</option>
+            <option value="priceAsc">По возрастанию цены</option>
+            <option value="priceDesc">По убыванию цены</option>
+          </select>
+        </div>
+      </div>
+
+      <h2 className="mt-2 mb-3 text-xl font-bold text-white">Рекомендации</h2>
 
       <div className="grid grid-cols-2 gap-4">
         {filteredItems.map((item) => (
